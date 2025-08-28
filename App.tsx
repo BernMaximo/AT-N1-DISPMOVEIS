@@ -3,33 +3,21 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-interface Endereco {
-  cep?: string;
-  logradouro?: string;
-  complemento?: string;         //o ? diz que o campo é opcional
-  bairro?: string;
-  localidade?: string;
-  uf?: string;
+interface KanyeQuote {
+  quote?: string;
 }
 
 export default function App() {
-  const [MeuEnd, setMeuEnd] = useState<Endereco>({});
+  const [kanye, setKanye] = useState<KanyeQuote>({});
 
   useEffect(() => {
-    getCep();
+    getKanyeQuote();
   }, []);
 
-  async function getCep() {
+  async function getKanyeQuote() {
     try {
-      const response = await axios.get<Endereco>("https://viacep.com.br/ws/78555000/json/",
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setMeuEnd(response.data);
-      setMeuEnd(response.data);
+      const response = await axios.get<KanyeQuote>("https://api.kanye.rest/");
+      setKanye(response.data);
     } catch (erro) {
       console.error(erro);
     }
@@ -37,7 +25,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Meu endereço é: {MeuEnd.logradouro ?? "Carregando..."}</Text>
+      <Text>Kanye diz: {kanye.quote ?? "Carregando..."}</Text>
       <StatusBar style="auto" />
     </View>
   );
